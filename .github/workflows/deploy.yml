@@ -42,7 +42,7 @@ jobs:
       -
         name: Build and push If Main UNSTABLE
         uses: docker/build-push-action@v6
-        if: github.ref == 'refs/heads/main'
+        if: startsWith(github.ref, 'refs/heads/main')
         with:
           push: true
           context: "./"
