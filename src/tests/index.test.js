@@ -1,3 +1,4 @@
+const { server, startServer } = require('../index');
 const http = require('http');
 
 const BASE_URL = 'http://127.0.0.1:3000';
@@ -15,9 +16,8 @@ describe('API Tests', () => {
 		});
 	};
 
-	let server;
-	beforeAll(() => {
-		server = require('../index');
+	beforeAll(async () => {
+		await startServer();
 	});
 
 	afterAll((done) => {

@@ -42,10 +42,13 @@ const server = http.createServer((req, res) => {
 	routeHandler(req, res);
 });
 
-if (require.main === module) {
-	server.listen(port, hostname, () => {
-		console.log(`Server running at http://${hostname}:${port}/`);
+const startServer = () => {
+	return new Promise((resolve) => {
+		server.listen(port, hostname, () => {
+			console.log(`Server running at http://${hostname}:${port}/`);
+			resolve(server);
+		});
 	});
-}
+};
 
-module.exports = server;
+module.exports = { server, startServer };
