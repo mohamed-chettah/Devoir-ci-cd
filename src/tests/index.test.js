@@ -17,7 +17,7 @@ describe('API Tests', () => {
 
 	let server;
 	beforeAll(() => {
-		server = require('./index');
+		server = require('../index');
 	});
 
 	afterAll((done) => {
