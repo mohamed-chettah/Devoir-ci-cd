@@ -10,14 +10,23 @@ jobs:
       IMAGE_NAME: "mynode"
     steps:
       - uses: actions/checkout@v4
+
+      # Lint du Dockerfile
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: ./Dockerfile
+
+      # Construction de l’image Docker
       - run: docker image build --tag="${IMAGE_NAME}" ./
+
+      # Lint du code source
       - run: docker container run "${IMAGE_NAME}" npm run lint
-      # - run: docker container run --volume="$(pwd)":/app "${IMAGE_NAME}" npm run lint
-      -
-        name: Login to Docker Hub
+
+      # Exécution des tests
+      - run: docker container run "${IMAGE_NAME}" npm test
+
+      # Connexion à Docker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: "moha210"
