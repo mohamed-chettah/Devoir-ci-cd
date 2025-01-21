@@ -11,9 +11,6 @@ on:
 jobs:
 
   # Job 1 : lint
-  # - Vérification du Dockerfile (Hadolint)
-  # - Build de l'image Docker
-  # - Lint du code (npm run lint) depuis l'image
   lint:
     runs-on: ubuntu-22.04
     env:
@@ -34,9 +31,6 @@ jobs:
         run: docker container run "${IMAGE_NAME}" npm run lint
 
   # Job 2 : test
-  # - Attend que le job lint ait réussi
-  # - Reconstruit l'image Docker (ou vous pouvez la conserver si vous implémentez un cache)
-  # - Lance vos tests (npm test) à l’intérieur du conteneur
   test:
     runs-on: ubuntu-22.04
     needs: [lint]
@@ -53,10 +47,6 @@ jobs:
         run: docker container run "${IMAGE_NAME}" npm test
 
   # Job 3 : deploy
-  # - Attend que les tests soient passés (job test)
-  # - Se connecte à Docker Hub
-  # - Pousse l'image avec un tag versionné si on est sur un tag
-  # - Pousse l'image avec un tag "unstable" si on est sur main
   deploy:
     runs-on: ubuntu-22.04
     needs: [test]
