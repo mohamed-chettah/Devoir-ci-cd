@@ -46,7 +46,7 @@ L'intégration continue (CI) tourne sur une machine **Ubuntu 22.04** et s'exécu
 - **À chaque commit sur `main` ou lorsqu'un tag est détecté :**
   1. Le code est **linté**.
   2. Les tests sont **exécutés**.
-  3. L'image Docker est **déployée** vers **Docker Hub** et **GitHub**.
+  3. L'image Docker est **déployée** vers **Docker Hub**.
 
 ---
 
