@@ -2,25 +2,53 @@
 
 ## Configuration
 
-Le projet est composé d'une api en nodejs avec quelques endpoint qui sont testé avec le package jest
+Ce projet contient une **API Node.js** avec plusieurs endpoints, testés à l'aide du package **Jest**.
 
-Chacune des étapes de la CI tourne sur une machine : ubuntu-22.04, elle s'éxécute à chaque pull request vers la main ou à chaque push vers la main avec un tag dans ce format là : - '[0-9]+.[0-9]+.[0-9]+'
+L'intégration continue (CI) tourne sur une machine **Ubuntu 22.04** et s'exécute dans les cas suivants :
+- À **chaque pull request** vers la branche `main`.
+- À **chaque push** vers `main` avec un **tag** au format : `[0-9]+.[0-9]+.[0-9]+` (ex: `1.0.0`).
+
 
 ## Les étapes de la CI
+### 1️⃣ **Linting**
+- Récupération du code source.
+- Analyse du **Dockerfile** avec `hadolint` pour respecter les bonnes pratiques.
+- Construction de l'image Docker.
+- Lancement du lint du code avec `npm run lint`.
 
-- Première étape c'est le linting, on récupere le code, ensuite on va Lint du dockerFile avec hadolint pour récupérer les bonnes pratiques, puis on build le docker file et enfin on Lint le code
-- Seconde étape c'est le lancement des tests, là aussi on récupère le code, on reconstruit l'image docker puis on lance les tests (jest)
-- Troisième étape c'est le dépoloiement, on récupère le code une nouvelle fois, on ce connecte au docker hub, on build et pousse seulement si on à un tag de détécté ou si on pousse sur la branche main
+### 2️⃣ **Tests**
+- Récupération du code source.
+- Reconstruction de l'image Docker.
+- Exécution des tests avec `npm test` (Jest).
 
-  A savoir pour lancer la deuxième étape on vérifie bien que la première à réussi et pareil pour la troisième on vérifie que la deuxième est passé, en se servant de need[''] à chaque fois
+**Cette étape ne démarre que si le linting a réussi.** 
 
+### 3️⃣ **Déploiement**
+- Récupération du code source.
+- Connexion à **Docker Hub**.
+- Construction et push de l’image Docker :
+  - **Si un tag est détecté**, l'image est poussée avec le tag correspondant (`x.y.z`).
+  - **Si le commit est sur `main`**, l'image est poussée avec le tag `unstable`.
 
-# Le livrable (projet)
+**Cette étape ne démarre que si les tests ont réussi.**
 
-- Retour Hello World
+---
 
+## Le livrable
 
-# Le cycle de vie déploiement/livraison
+- **Une API Node.js**
+- **Un pipeline de déploiement continu** (CI/CD)
 
-- A chaque commit le code poussé est testé
+---
 
+## Cycle de vie du déploiement/livraison
+
+- **À chaque commit sur `main` ou lorsqu'un tag est détecté :**
+  1. Le code est **linté**.
+  2. Les tests sont **exécutés**.
+  3. L'image Docker est **déployée** vers **Docker Hub** et **GitHub**.
+
+---
+
+### ** Remarque**
+Chaque étape dépend de la précédente grâce au paramètre **`needs: []`**, garantissant qu'un échec bloque la suite du pipeline.
